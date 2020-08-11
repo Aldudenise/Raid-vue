@@ -1,0 +1,79 @@
+Aclaraciones:
+
+1) Para mantener simplificado el proyecto no se utilizó el vue-router, pero para el final va a ser prioridad 
+   resolverlo con esa librería, en ese caso el pasaje de información puede no ser únicamente con $emits
+
+2) Se podría reutilizar el formulario de creación y edición, en este caso se separaron las vistas para 
+   dar un ejemplo de uso de ventanas modales.
+
+3) Se separó la lógica de vistas en:
+
+<root>
+<crear-usuario>
+<editar-usuario>
+<usuarios>
+
+4) Se separó la lógica de componentes en:
+
+<modal>
+<tabla>
+
+
+Vistas, data, methods y emits:
+
+
+         <Root />
+|--------------------------|
+|          DATA            |
+|--------------------------|
+|  -usuarioSeleccionado-   |  --> objeto que controla la modal y el usuario a editar
+|    -listadoUsuario-      |  --> listado a trabajar
+|--------------------------|
+|--------------------------|
+|         METHODS          |
+|--------------------------|
+|       crearUsuario       | --> agregar con push()
+|       editarUsuario      | --> edita con splice()
+|       borrarUsuario      | --> elimina con splice()
+|     habilitarEdicion     | --> setea la variable 'usuarioSeleccionado' con usuario existente y un indice
+|    inHabilitarEdicion    | --> setea 'usuarioSeleccionado' en null para ocultar la modal
+|--------------------------|  
+
+     <crear-usuario />     
+|-------------------------|
+|          $EMIT          |
+|-------------------------|
+|        @on-create       | --> envía un usuario nuevo: @on-create="crearUsuario"
+|-------------------------|   
+
+
+        <usuarios />
+|-------------------------|
+|          $EMIT          |
+|-------------------------|
+|        @on-delete       | --> le envía el indice en el array del elemento a borrar: on-delete="borrarUsuario"
+|        @on-edit         | --> envía un objeto para ser asignado a la variable Root->data->usuarioSeleccionado
+|                         |     Ejemplo: { indice: 0, data: {nombre: 'Fran', 'Piaggio'} }
+|-------------------------|
+|          PROPS          |
+|-------------------------|
+|        usuarios         | --> listado principal
+|-------------------------|
+
+     <editar-usuario />
+|-------------------------|
+|          $EMIT          |
+|-------------------------|
+|        @on-edit         | --> envía el objeto ya editado para ser reemplazado en el listado general
+|-------------------------|
+|          PROPS          |
+|-------------------------|
+|         usuario         | --> el usuario que vamos a visualizar en la modal para editar. 
+|                         |     Con el hook beforeMount se asigna en el data interno del componente
+|-------------------------|
+|          DATA           |
+|-------------------------|
+|      usuarioEditar      | --> para evitar editar directamente la prop, se lo duplica
+|                         |     de esta forma podes escribir los nuevos datos y enviarlos
+|                         |     sin modificar el objeto original
+|-------------------------|

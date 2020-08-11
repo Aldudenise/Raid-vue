@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="styles/bootstrap/js/bootstrap.js">
+    <link href="styles/rpgui/dist/rpgui.css" rel="stylesheet" type="text/css" >
+    <script src="styles/rpgui/dist/rpgui.js"></script>
+    <link rel="stylesheet" href="styles/main.css">
+    <title>¡Sumate a nuestro raid!</title>
+</head>
+<body>
+    <div class="rpgui-content rpgui-cursor-default" style="overflow-y: scroll; background-color: #222;">
+        <main id="app" class="container mt-10 w-10 inner rpgui-container framed container col-8" style= "position:relative">
+            <h1 class="lead" style="font-size: 200%">¡Unite a nuestro raid!</h1>
+            <h2>Pronto zarparemos hacia un dungeon en otro continente, ¡acompáñanos!</h2>
+            <hr class="golden">
+            <!-- Creación de personajes -->
+            <crear-personaje @on-create="crearPersonaje"></crear-personaje>
+            <!-- Listado y borrado -->
+            <h2>Personajes listos para la aventura:</h2>
+            <personajes 
+                :personajes="listadoPersonajes" 
+                @on-edit="habilitarEdicion"
+                @on-delete="borrarPersonaje"
+            ></personajes>
+			<hr class="golden">
+            <footer class="mt-5 text-center row">
+                <img src="img/skelly2.png" class="col-2" alt="">
+                <p class="col-8">Made with ❤ by Aldana Gonzalez</p>
+                <img src="img/skelly2.png" class="col-2" style="transform:scaleX(-1)" alt="">
+            </footer>
+            <!-- Edición -->
+            <modal
+                v-if="personajeSeleccionado" 
+                titulo="Editar Personaje" 
+                @cerrar="inHabilitarEdicion"
+            >
+                <editar-personaje 
+                    :personaje="personajeSeleccionado.data"
+                    @on-edit="editarPersonaje"
+                ></editar-personaje>
+            </modal>
+        </main>
+    </div>
+    <script src="lib/vue.js"></script>
+    <script src="scripts/componentes/tabla.js"></script>
+    <script src="scripts/componentes/modal.js"></script>
+    <script src="scripts/vistas/crearPersonaje.js"></script>
+    <script src="scripts/vistas/editarPersonaje.js"></script>
+    <script src="scripts/vistas/personajes.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+</html>
